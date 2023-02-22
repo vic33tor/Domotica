@@ -14,6 +14,10 @@ const router = createRouter({
       name: "Principal",
       component: MiPrincipal,
     },
+    {
+      path: "/:pathMatch(.*)*",
+      redirect: () => ({ name: "home" }),
+    },
   ],
 });
 

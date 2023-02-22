@@ -1,85 +1,115 @@
 <template>
   <div class="text-center">
     <button
-      @click="isOpen = true"
+      @click="datos.guardarDatos(route.params.nombre, true)"
       class="mt-6 px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded"
     >
       Crea una sala
     </button>
     <div>
       <ul>
-        <li v-for="(el, idx) in salas" :key="idx">
-          {{ el.Nombre }}
+        <li v-for="(sala, idx) in salas" :key="idx">
+          <div class="sala bg-amber-100 border-2 border-black w-1/2 p-4">
+            <div class="flex justify-between">
+              <button
+                class="bg-white border-2 border-black p-2"
+                @click="borrarSala(sala.id, sala.Nombre)"
+              >
+                Borrar
+              </button>
+              <p class="ml-16">{{ sala.Nombre }}</p>
+              <button
+                class="bg-white border-2 border-black p-2"
+                @click="iniciarModal(sala.Nombre)"
+              >
+                Crear dispositivo
+              </button>
+            </div>
+            <ul>
+              <li
+                v-for="(el, idx) in dispositivos.filter(
+                  (x) => x.Sala == sala.Nombre
+                )"
+                :key="idx"
+                class="dispositivo w-3/12 border-2 border-black"
+              >
+                <div>
+                  {{ el.Nombre }}<br />
+                  {{ el.Tipo }}<br />
+                </div>
+                <div v-if="el.Tipo == 'ejecutor'">
+                  <button class="w-10 h-6 bg-red-500">Off</button>
+                </div>
+                <div v-else>
+                  {{ el.Temperatura }}
+                </div>
+                <button
+                  class="w-24 h-8 bg-white border-2 border-black mt-4 mb-1"
+                  @click="borrarDispositivo(el.id)"
+                >
+                  Borrar
+                </button>
+              </li>
+            </ul>
+          </div>
         </li>
       </ul>
     </div>
   </div>
-  <div
-    v-show="isOpen"
-    class="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50"
-  >
-    <div class="max-w-2xl p-6 bg-white rounded-md shadow-xl">
-      <div class="flex items-center justify-between">
-        <h3 class="text-2xl">Añade un evento</h3>
-        <svg
-          @click="isOpen = false"
-          xmlns="http://www.w3.org/2000/svg"
-          class="w-8 h-8 text-red-900 cursor-pointer"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      </div>
-      <div class="mt-4">
-        <p class="mb-4 text-sm">Nombre</p>
-        <input
-          v-model="Nombre"
-          class="bg-[#F0EBCE] w-64 h-8 border-2 border-[#AA8B56]"
-        />
-        <div class="flex justify-center pt-4">
-          <button
-            @click="isOpen = false"
-            class="px-6 py-2 text-blue-800 border border-blue-600 rounded"
-          >
-            Cancelar
-          </button>
-          <button
-            @click="anhadirSala"
-            class="px-6 py-2 ml-2 text-blue-100 bg-blue-600 rounded"
-          >
-            Crear
-          </button>
-        </div>
-      </div>
-    </div>
+  <div v-show="datos.getOpenSala">
+    <ModalCreaSalas />
+  </div>
+  <div v-show="datos.getOpenDispositivo">
+    <ModalDispositivo />
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { onGetSalas, onGetDispositivos, borrar } from "@/API/firebase";
+import { useDatosStore } from "@/stores/DatosForm";
 import { useRoute } from "vue-router";
-import { onGetSalas, anadeSala } from "@/API/firebase";
+import ModalCreaSalas from "../components/ModalCreaSalas.vue";
+import ModalDispositivo from "../components/ModalDispositivo.vue";
 const route = useRoute();
-let isOpen = ref(false);
-const Nombre = ref("");
+const datos = useDatosStore();
 const salas = ref([]);
+const dispositivos = ref([]);
+const iniciarModal = (nomSala) => {
+  datos.guardarNombre(nomSala);
+  datos.cambiarOpenDispositivo(true);
+};
+const borrarSala = (idSala, nomSala) => {
+  borrar("Salas", idSala);
+  dispositivos.value.map((x) =>
+    x.Sala == nomSala ? borrar("Dispositivo", x.id) : ""
+  );
+};
+const borrarDispositivo = (idDispositivo) => {
+  borrar("Dispositivo", idDispositivo);
+};
 onGetSalas("Salas", (docs) => {
   salas.value = [];
   docs.forEach((doc) => {
-    salas.value.push(doc.data());
+    salas.value.push({ id: doc.id, ...doc.data() });
   });
 });
-const anhadirSala = () => {
-  isOpen.value = false;
-  anadeSala("Salas", { Nombre: Nombre.value, Usuario: route.params.nombre });
-};
+onGetDispositivos("Dispositivo", (docs) => {
+  dispositivos.value = [];
+  docs.forEach((doc) => {
+    dispositivos.value.push({ id: doc.id, ...doc.data() });
+  });
+});
 </script>
 
-<style scoped></style>
+<style scoped>
+.sala {
+  margin: 0 auto;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+.dispositivo {
+  margin: 0 auto;
+  margin-bottom: 1em;
+}
+</style>

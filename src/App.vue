@@ -5,7 +5,7 @@ import CabeceraPrincipal from "@/components/CabeceraPrincipal.vue";
 
 <template>
   <div>
-    <CabeceraPrincipal titulo="Domotica" />
+    <CabeceraPrincipal titulo="Domótica" />
     <RouterView />
   </div>
 </template>

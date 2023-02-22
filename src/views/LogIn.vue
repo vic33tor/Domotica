@@ -31,9 +31,7 @@ const Nombre = ref("");
 const Password = ref("");
 const IniciaSesion = () => {
   onIniciar("Usuario", (docs) => {
-    console.log(Nombre.value);
     docs.forEach((doc) => {
-      console.log(doc.data());
       Password.value == doc.data().Password && Nombre.value == doc.data().Nombre
         ? router.push({
             name: "Principal",

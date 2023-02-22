@@ -40,9 +40,12 @@ export const onIniciar = (ref, callback) =>
   onSnapshot(collection(db, ref), callback);
 export const onGetSalas = (ref, callback) =>
   onSnapshot(collection(db, ref), callback);
-export const anadeSala = (ref, mascota) =>
-  addDoc(collection(db, ref), mascota);
-export const deleteMascota = (ref, id) => deleteDoc(doc(db, ref, id));
+export const onGetDispositivos = (ref, callback) =>
+  onSnapshot(collection(db, ref), callback);
+export const anadeSala = (ref, sala) => addDoc(collection(db, ref), sala);
+export const anadeDispositivo = (ref, dispositivo) =>
+  addDoc(collection(db, ref), dispositivo);
+export const borrar = (ref, id) => deleteDoc(doc(db, ref, id));
 export const getMascota = (ref, id) => getDoc(doc(db, ref, id));
 export const editarMascota = (ref, id, objeto) =>
   updateDoc(doc(db, ref, id), objeto);
