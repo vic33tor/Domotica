@@ -38,7 +38,22 @@
                   {{ el.Tipo }}<br />
                 </div>
                 <div v-if="el.Tipo == 'ejecutor'">
-                  <button class="w-10 h-6 bg-red-500">Off</button>
+                  <div v-if="!el.Estado">
+                    <button
+                      class="w-10 h-6 bg-red-500"
+                      @click="editarDispositivo(el.id, true)"
+                    >
+                      Off
+                    </button>
+                  </div>
+                  <div v-else>
+                    <button
+                      class="w-10 h-6 bg-green-500"
+                      @click="editarDispositivo(el.id, false)"
+                    >
+                      On
+                    </button>
+                  </div>
                 </div>
                 <div v-else>
                   {{ el.Temperatura }}
@@ -66,7 +81,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { onGetSalas, onGetDispositivos, borrar } from "@/API/firebase";
+import { onGetSalas, onGetDispositivos, borrar, editar } from "@/API/firebase";
 import { useDatosStore } from "@/stores/DatosForm";
 import { useRoute } from "vue-router";
 import ModalCreaSalas from "../components/ModalCreaSalas.vue";
@@ -87,6 +102,11 @@ const borrarSala = (idSala, nomSala) => {
 };
 const borrarDispositivo = (idDispositivo) => {
   borrar("Dispositivo", idDispositivo);
+};
+const editarDispositivo = (idDispositivo, estado) => {
+  editar("Dispositivo", idDispositivo, {
+    Estado: estado,
+  });
 };
 onGetSalas("Salas", (docs) => {
   salas.value = [];

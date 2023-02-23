@@ -47,5 +47,4 @@ export const anadeDispositivo = (ref, dispositivo) =>
   addDoc(collection(db, ref), dispositivo);
 export const borrar = (ref, id) => deleteDoc(doc(db, ref, id));
 export const getMascota = (ref, id) => getDoc(doc(db, ref, id));
-export const editarMascota = (ref, id, objeto) =>
-  updateDoc(doc(db, ref, id), objeto);
+export const editar = (ref, id, objeto) => updateDoc(doc(db, ref, id), objeto);
