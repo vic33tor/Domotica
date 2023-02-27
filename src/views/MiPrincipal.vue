@@ -81,7 +81,7 @@
 
 <script setup>
 import { ref } from "vue";
-import { onGetSalas, onGetDispositivos, borrar, editar } from "@/API/firebase";
+import { onGet, borrar, editar } from "@/API/firebase";
 import { useDatosStore } from "@/stores/DatosForm";
 import { useRoute } from "vue-router";
 import ModalCreaSalas from "../components/ModalCreaSalas.vue";
@@ -108,13 +108,13 @@ const editarDispositivo = (idDispositivo, estado) => {
     Estado: estado,
   });
 };
-onGetSalas("Salas", (docs) => {
+onGet("Salas", (docs) => {
   salas.value = [];
   docs.forEach((doc) => {
     salas.value.push({ id: doc.id, ...doc.data() });
   });
 });
-onGetDispositivos("Dispositivo", (docs) => {
+onGet("Dispositivo", (docs) => {
   dispositivos.value = [];
   docs.forEach((doc) => {
     dispositivos.value.push({ id: doc.id, ...doc.data() });

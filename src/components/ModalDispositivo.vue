@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { anadeDispositivo } from "@/API/firebase";
+import { anade } from "@/API/firebase";
 import { useDatosStore } from "@/stores/DatosForm";
 import { ref } from "vue";
 const datos = useDatosStore();
@@ -60,13 +60,13 @@ const tipo = ref("");
 const anhadirDispositivo = () => {
   datos.cambiarOpenDispositivo(false);
   tipo.value == "sensor"
-    ? anadeDispositivo("Dispositivo", {
+    ? anade("Dispositivo", {
         Nombre: Nombre.value,
         Sala: datos.getNombreSala,
         Tipo: tipo.value,
         Temperatura: "-",
       })
-    : anadeDispositivo("Dispositivo", {
+    : anade("Dispositivo", {
         Nombre: Nombre.value,
         Sala: datos.getNombreSala,
         Tipo: tipo.value,

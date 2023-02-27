@@ -47,14 +47,14 @@
 </template>
 
 <script setup>
-import { anadeSala } from "@/API/firebase";
+import { anade } from "@/API/firebase";
 import { useDatosStore } from "@/stores/DatosForm";
 import { ref } from "vue";
 const datos = useDatosStore();
 const Nombre = ref("");
 const anhadirSala = () => {
   datos.cambiarOpenSala(false);
-  anadeSala("Salas", { Nombre: Nombre.value, Usuario: datos.getUsuario });
+  anade("Salas", { Nombre: Nombre.value, Usuario: datos.getUsuario });
 };
 </script>
 
