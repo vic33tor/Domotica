@@ -56,7 +56,7 @@ import { useDatosStore } from "@/stores/DatosForm";
 import { ref } from "vue";
 const datos = useDatosStore();
 const Nombre = ref("");
-const tipo = ref("");
+const tipo = ref("sensor");
 const anhadirDispositivo = () => {
   datos.cambiarOpenDispositivo(false);
   tipo.value == "sensor"
@@ -72,6 +72,8 @@ const anhadirDispositivo = () => {
         Tipo: tipo.value,
         Estado: false,
       });
+  Nombre.value = "";
+  tipo.value = "";
 };
 </script>
 

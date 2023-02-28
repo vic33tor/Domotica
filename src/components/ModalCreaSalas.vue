@@ -55,6 +55,7 @@ const Nombre = ref("");
 const anhadirSala = () => {
   datos.cambiarOpenSala(false);
   anade("Salas", { Nombre: Nombre.value, Usuario: datos.getUsuario });
+  Nombre.value = "";
 };
 </script>
 
