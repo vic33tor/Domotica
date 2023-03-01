@@ -55,9 +55,7 @@
                     </button>
                   </div>
                 </div>
-                <div v-else>
-                  {{ el.Temperatura }}
-                </div>
+                <div v-else>{{ el.Temperatura }}ºC</div>
                 <button
                   class="w-24 h-8 bg-white border-2 border-black mt-4 mb-1"
                   @click="borrarDispositivo(el.id)"
