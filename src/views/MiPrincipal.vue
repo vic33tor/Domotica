@@ -64,6 +64,12 @@
                 >
                   Borrar
                 </button>
+                <button
+                  class="w-24 h-8 bg-white border-2 border-black mt-4 mb-1"
+                  @click="iniciarModalCambio(sala.Nombre, el.id)"
+                >
+                  Cambiar
+                </button>
               </li>
             </ul>
           </div>
@@ -77,6 +83,9 @@
   <div v-show="datos.getOpenDispositivo">
     <ModalDispositivo />
   </div>
+  <div v-show="datos.getOpenCambioSala">
+    <ModalCambioSalas />
+  </div>
 </template>
 
 <script setup>
@@ -86,6 +95,7 @@ import { useDatosStore } from "@/stores/DatosForm";
 import { useRoute } from "vue-router";
 import ModalCreaSalas from "../components/ModalCreaSalas.vue";
 import ModalDispositivo from "../components/ModalDispositivo.vue";
+import ModalCambioSalas from "../components/ModalCambioSalas.vue";
 const route = useRoute();
 const datos = useDatosStore();
 const salas = ref([]);
@@ -93,6 +103,11 @@ const dispositivos = ref([]);
 const iniciarModal = (nomSala) => {
   datos.guardarNombre(nomSala);
   datos.cambiarOpenDispositivo(true);
+};
+const iniciarModalCambio = (nomSala, idDispositivo) => {
+  datos.guardarId(idDispositivo);
+  datos.guardarNombre(nomSala);
+  datos.cambiarOpenCambioSala(true);
 };
 const borrarSala = (idSala, nomSala) => {
   borrar("Salas", idSala);
